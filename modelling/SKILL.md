@@ -18,12 +18,15 @@ Crie ou edite modelos SQL a partir de perguntas de análise e negócio, conduzin
 | Em toda fase, para executar | [Checklist operacional](references/checklist.md) — copie para `CHECKLIST.md` |
 | Ao entrevistar | [Entrevista](references/entrevista.md) |
 | Ao criar/editar documentos e SQL | [Padrões dos artefatos](references/documentos.md) |
+| Ao escrever ou revisar qualquer `.sql` | [Boas práticas na escrita](references/boas-praticas-escrita-sql.md) — estilo, estrutura, agregação e leitura |
 | Em todo estudo de custo | [Custos do BigQuery](references/custos-bigquery.md) |
 | Para comandos prontos de BigQuery e PTAX | [Comandos](references/comandos.md) |
 | Antes de propor variante otimizada | [Otimização SQL](references/otimizacao-sql.md); para outros dialetos, leia também `sql-optimization` |
 | Antes de investigar, gerar SQL ou concluir | [Validação e segurança](references/validacao.md) |
 
 Formatos ficam em `templates/`: copie o template, nunca redija o esqueleto. Os scripts em `scripts/` executam dry run, inventário, câmbio, custo e auditoria; use-os em vez de improvisar comandos. `references/comandos.md` traz os comandos manuais equivalentes.
+
+Todo modelo segue as orientações de melhores práticas de escrita de queries registradas em `references/boas-praticas-escrita-sql.md`: estilo, estrutura, agregação, colunas e leitura. A referência vale para canônica, teste e variante; em conflito com uma invariante desta skill, vale a invariante.
 
 ## Invariantes
 
