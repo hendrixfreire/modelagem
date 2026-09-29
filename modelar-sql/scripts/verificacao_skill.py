@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verificação estática da skill modelling (estrutura, gates, templates)."""
+"""Verificação estática da skill modelar-sql (estrutura, gates, templates)."""
 import json
 import re
 from pathlib import Path

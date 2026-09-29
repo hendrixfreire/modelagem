@@ -1,6 +1,6 @@
 # Otimização SQL no BigQuery
 
-Pergunte na entrevista se o usuário deseja variantes otimizadas. Para outro dialeto, leia também a skill `sql-optimization` e adapte: esta referência cobre BigQuery.
+Pergunte na entrevista se o usuário deseja variantes otimizadas. Para um catálogo mais amplo de técnicas, leia também [otimizar-sql](../../otimizar-sql/SKILL.md); nesta skill, as invariantes da `SKILL.md` e o gate G04 prevalecem sobre ela. Para outro dialeto, identifique-o em F01 e adapte estas técnicas.
 
 ## Canônica
 

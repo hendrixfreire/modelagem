@@ -2,7 +2,7 @@
 
 ## Quando carregar
 
-Leia esta referência quando a tarefa criar ou alterar dashboards, relatórios, interface, filtros, cálculos na ferramenta de visualização, acessos ou publicação. Preencha a seção 4 do template do produto. Siga também o guia comum, indicado no SKILL.md.
+Leia esta referência quando a tarefa criar ou alterar dashboards, relatórios, interface, filtros, cálculos na ferramenta de visualização, acessos ou publicação. Preencha `dv.md` com a seção 4 do modelo do produto. Consulte `visao-geral.md` para contexto e `historico.md` para mudanças. Siga também o guia comum, indicado no SKILL.md.
 
 ## Fontes a consultar
 
@@ -29,11 +29,11 @@ Diferencie regra calculada em AE de cálculo adicional em DV. Referencie defini�
 
 Confirme o comportamento anterior, o que mudou, motivo, data e responsável. Identifique páginas, indicadores, filtros, grupos de acesso e consumidores afetados. Verifique se a alteração exige rever documentação de AE; não altere a definição de negócio por conta própria.
 
-Atualize as seções técnicas e o histórico. Diferencie publicação em teste de publicação em produção. Não afirme disponibilidade para usuários apenas porque o arquivo do relatório foi salvo.
+Atualize `dv.md` para o estado vigente e `historico.md` para a mudança. Diferencie publicação em teste de publicação em produção. Não afirme disponibilidade para usuários apenas porque o arquivo do relatório foi salvo.
 
 ## Arquivos complementares
 
-Pergunte se existem capturas de tela, mapas de navegação, fluxos de uso ou arquivos de design. Registre-os na seção 1.1 com finalidade, descrição textual, fonte editável, responsável, revisão e situação. Atualize imagens e descrições afetadas por mudanças na interface. Identifique capturas históricas por data e versão e remova dados pessoais ou restritos desnecessários. Se não houver ferramenta para conferir imagens, declare que a revisão visual não ocorreu.
+Pergunte se existem capturas de tela, mapas de navegação, fluxos de uso ou arquivos de design. Registre-os na seção 1.1 de `visao-geral.md` com finalidade, descrição textual, fonte editável, responsável, revisão e situação. Atualize imagens e descrições afetadas por mudanças na interface. Identifique capturas históricas por data e versão e remova dados pessoais ou restritos desnecessários. Se não houver ferramenta para conferir imagens, declare que a revisão visual não ocorreu.
 
 ## Verificação da área
 

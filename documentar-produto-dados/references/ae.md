@@ -2,7 +2,7 @@
 
 ## Quando carregar
 
-Leia esta referência quando a tarefa criar ou alterar modelos, tabelas, views, transformações, regras de negócio, indicadores ou testes dos dados. Preencha a seção 3 do template do produto. Siga também o guia comum, indicado no SKILL.md.
+Leia esta referência quando a tarefa criar ou alterar modelos, tabelas, views, transformações, regras de negócio, indicadores ou testes dos dados. Preencha `ae.md` com a seção 3 do modelo do produto. Consulte `visao-geral.md` para contexto e `historico.md` para mudanças. Siga também o guia comum, indicado no SKILL.md.
 
 ## Fontes a consultar
 
@@ -28,13 +28,13 @@ Para taxas e médias, obtenha numerador, denominador e tratamento de denominador
 
 ## Se for atualização
 
-Confirme o comportamento anterior, a mudança, o motivo, a data e o responsável. Identifique indicadores e consumidores afetados, mudanças de granularidade ou schema e necessidade de reprocessar períodos anteriores. Atualize as seções vigentes e acrescente o registro no histórico; não registre a mudança apenas no histórico.
+Confirme o comportamento anterior, a mudança, o motivo, a data e o responsável. Identifique indicadores e consumidores afetados, mudanças de granularidade ou schema e necessidade de reprocessar períodos anteriores. Atualize `ae.md` para o estado vigente e acrescente o registro em `historico.md`;  não registre a mudança apenas no histórico.
 
 Se uma decisão de negócio estiver pendente, não a resolva por inferência do SQL. Registre o comportamento implementado e encaminhe a confirmação ao responsável.
 
 ## Arquivos complementares
 
-Pergunte se existem diagramas de modelos, relações entre bases, fluxos de transformação ou arquivos de validação. Registre-os na seção 1.1 com finalidade, descrição textual, fonte editável, responsável, revisão e situação. Atualize os arquivos afetados junto com o texto. Preserve evidências históricas com sua data e versão. Se não puder ler um formato, declare a limitação.
+Pergunte se existem diagramas de modelos, relações entre bases, fluxos de transformação ou arquivos de validação. Registre-os na seção 1.1 de `visao-geral.md` com finalidade, descrição textual, fonte editável, responsável, revisão e situação. Atualize os arquivos afetados junto com o texto. Preserve evidências históricas com sua data e versão. Se não puder ler um formato, declare a limitação.
 
 ## Verificação da área
 

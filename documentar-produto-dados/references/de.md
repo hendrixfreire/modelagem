@@ -2,7 +2,7 @@
 
 ## Quando carregar
 
-Leia esta referência quando a tarefa criar ou alterar extrações, conectores, ingestão, rotinas de carga, fontes ou destinos de dados. Preencha a seção 2 do template do produto. Siga também o guia comum, indicado no SKILL.md.
+Leia esta referência quando a tarefa criar ou alterar extrações, conectores, ingestão, rotinas de carga, fontes ou destinos de dados. Preencha `de.md` com a seção 2 do modelo do produto. Consulte `visao-geral.md` para contexto e `historico.md` para mudanças. Siga também o guia comum, indicado no SKILL.md.
 
 ## Fontes a consultar
 
@@ -28,11 +28,11 @@ Registre horários operacionais em UTC. Diferencie frequência configurada de ca
 
 Confirme origem da demanda, comportamento anterior, mudança, motivo, data e responsável. Identifique alterações de schema, frequência, cobertura histórica e destinos. Verifique impacto nos consumidores e necessidade de reprocessamento. Documente o comportamento em falha e as condições de recuperação sem executar essas operações para preencher o documento.
 
-Atualize a seção técnica vigente e o histórico do produto. Se a origem e a saída esperada por AE divergirem, registre a divergência e solicite confirmação, sem inventar uma compatibilidade.
+Atualize `de.md` para o estado vigente e `historico.md` para a mudança. Confira os links a partir da pasta do produto. Se a origem e a saída esperada por AE divergirem, registre a divergência e solicite confirmação, sem inventar uma compatibilidade.
 
 ## Arquivos complementares
 
-Pergunte se existem diagramas de ingestão, fluxos de carga, mapas de sistemas ou relatórios de execução. Registre cada arquivo na seção 1.1 com finalidade, descrição textual, fonte editável, responsável, revisão e situação. Revise os arquivos afetados pela alteração e preserve evidências históricas identificadas por data e versão. Registre limitações de leitura de formatos.
+Pergunte se existem diagramas de ingestão, fluxos de carga, mapas de sistemas ou relatórios de execução. Registre cada arquivo na seção 1.1 de `visao-geral.md` com finalidade, descrição textual, fonte editável, responsável, revisão e situação. Revise os arquivos afetados pela alteração e preserve evidências históricas identificadas por data e versão. Registre limitações de leitura de formatos.
 
 ## Verificação da área
 

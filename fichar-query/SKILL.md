@@ -1,14 +1,16 @@
 ---
 name: fichar-query
-description: Use ao fichar uma query SQL ou um model .sqlx do Dataform. Gera ficha-query-<ID>.md com fontes, blocos, filtros, campos por bloco e saída final, sem análise.
-version: 0.6.0
+description: "Extrai a estrutura de uma query SQL ou de um model .sqlx do Dataform (fontes, CTEs, filtros, campos por bloco, saída final) e grava a ficha-query-<ID>.md em tabelas, sem análise. Use quando o usuário pedir para fichar, fichamento, mapear fontes e campos, extrair estrutura ou comparar versões de uma query. Não use para explicar, validar, comentar, otimizar ou reescrever a query."
+disable-model-invocation: true
+argument-hint: "[arquivo .sql | .sqlx] [--id ID]"
+version: 0.7.0
 author: Hendrix Freire, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [sql, fichamento, documentacao, extracao, dataform, bigquery]
-    related_skills: [explicando_query, validacao-semantica-sql, bigquery-cost-estimation]
+    related_skills: [explicar-query, comentar-query]
 ---
 
 # Fichar Query
@@ -16,6 +18,15 @@ metadata:
 Extraia as informações estruturais de uma query e grave tudo em `ficha-query - <projeto>.<dataset>.<tabela> - <ID>.md` com tabelas.
 
 Esta skill só extrai. Não analise, não valide, não comente, não recomende, não reescreva a query.
+
+> **Ferramentas por ambiente.** Esta skill roda em Claude Code, Hermes e Codex. Os nomes de ferramentas citados (`read_file`, `search_files`) seguem o Hermes. Use a ferramenta equivalente do ambiente atual para ler e buscar arquivos. Os scripts abaixo são Python puro e rodam em qualquer ambiente com shell.
+
+## Referências (carregue sob demanda)
+
+| Quando | Ler |
+| --- | --- |
+| Antes de gravar qualquer ficha (script ou manual) | [template.md](references/template.md) |
+| Ao fichar à mão, ao conferir a saída do script ou ao tratar `.sqlx` e tipos | [regras-extracao.md](references/regras-extracao.md) |
 
 ## Vocabulário
 
@@ -29,8 +40,10 @@ Esta skill só extrai. Não analise, não valide, não comente, não recomende, 
 
 ### Caminho padrão: script
 
+`<pasta-desta-skill>` é a pasta que contém este `SKILL.md` (no Claude Code, `${CLAUDE_SKILL_DIR}`; nos demais ambientes, o diretório de onde a skill foi carregada).
+
 ```bash
-python3 ~/.agents/skills/modelagem/fichar-query/scripts/fichar_query.py \
+python3 <pasta-desta-skill>/scripts/fichar_query.py \
   "<arquivo.sql|arquivo.sqlx>" [--id ID] [--out-dir DIR] \
   [--schema-json ARQ.json] [--limite-expressao 300]
 ```
@@ -45,9 +58,9 @@ O gate do script reprova quando encontra: tabela com número de colunas variáve
 
 ### Caminho manual
 
-Use quando o gate reprovar ou quando o script não cobrir a query. Siga as regras deste documento.
+Use quando o gate reprovar ou quando o script não cobrir a query. Siga o template e as regras de extração das referências.
 
-1. Localize a query completa com `read_file` ou `search_files`.
+1. Localize a query completa com `read_file` ou `search_files` (ou equivalente do ambiente).
 2. Determine o ID nesta ordem: ID informado pelo usuário; nome do arquivo de origem sem extensão; pergunte ao usuário. Monte o nome do arquivo como `ficha-query - <projeto>.<dataset>.<tabela> - <ID>.md`, com a primeira tabela citada no `FROM`.
 3. Determine o diretório de saída nesta ordem: diretório informado pelo usuário; diretório do arquivo de origem; subpasta `fichas-query/` do diretório de trabalho atual.
 
@@ -59,160 +72,10 @@ Use quando o gate reprovar ou quando o script não cobrir a query. Siga as regra
 4. Escape `|` como `\|` dentro das células. Mantenha cada célula em uma única linha.
 5. Só títulos e tabelas entram no arquivo.
 
-## Template
-
-```markdown
-# Ficha da query — <ID>
-
-## 1. Fontes de dados
-
-| # | Projeto | Dataset | Objeto | Alias na query | Referenciada em |
-|---|---|---|---|---|---|
-| 1 |  |  |  |  |  |
-
-## 2. CTEs
-
-| Bloco | CTE | Origem | Consumida por |
-|---|---|---|---|
-| CTE 01 |  |  |  |
-
-## 3. Filtros aplicados
-
-| # | Local | Cláusula | Condição | Coluna(s) | Valor ou limite |
-|---|---|---|---|---|---|
-| 1 |  |  |  |  |  |
-
-## 4. Campos por bloco
-
-### <código> — <rótulo do bloco>
-
-| # | Campo exposto | Origem | Campo na origem | Expressão |
-|---|---|---|---|---|
-| 1 |  |  |  |  |
-
-## 5. Saída final
-
-| # | Bloco | Campo | Tipo |
-|---|---|---|---|
-| 1 |  |  |  |
-
-## 6. Expressões
-
-| # | Bloco | Campo exposto | Expressão |
-|---|---|---|---|
-| E1 |  |  |  |
-
-## 7. Conferência de posição
-
-### União de <códigos>
-
-| Posição | <código> | <código> |
-|---|---|---|
-| 1 |  |  |
-
-## 8. Configuração do modelo
-
-| # | Item | Valor |
-|---|---|---|
-| 1 |  |  |
-```
-
-As seções 6, 7 e 8 só existem quando se aplicam. As seções 1 a 5 existem sempre.
-
-## Regras de extração
-
-### Seção 1 — Fontes de dados
-
-- Registre todo objeto citado em `FROM`, `FROM` de subquery e `JOIN`, com o nome completo `projeto.dataset.objeto`.
-- Separe o nome completo nas colunas `Projeto`, `Dataset` e `Objeto`.
-- Quando a query omitir o projeto, escreva `não informado` na célula `Projeto`. Não complete o nome por suposição.
-- Na coluna `Alias na query`, registre o alias usado no SQL. Deixe vazio quando não houver alias.
-- Na coluna `Referenciada em`, registre o código do bloco que lê a fonte.
-- Registre uma linha por ocorrência. O mesmo objeto lido em dois blocos gera duas linhas.
-- Não registre CTE nesta seção. CTE pertence à seção 2.
-- Não registre `UNNEST` nesta seção.
-
-### Seção 2 — CTEs
-
-- Liste todas as CTEs na ordem declarada, inclusive `WITH RECURSIVE`.
-- Na coluna `Bloco`, escreva o código `CTE nn`. Na coluna `CTE`, escreva o nome da CTE.
-- Na coluna `Origem`, liste as tabelas e os códigos dos blocos que a CTE lê.
-- Na coluna `Consumida por`, liste cada bloco que lê esta CTE. Escreva `SAÍDA` quando a saída final a consumir. Escreva `não consumida` quando nada a ler.
-- Quando a query não tiver CTE, escreva `sem CTE` na coluna `CTE` e `—` nas demais colunas, mantendo o cabeçalho.
-
-### Seção 3 — Filtros aplicados
-
-- Registre toda condição de `WHERE`, `ON`, `HAVING` e `QUALIFY`, inclusive dentro de subqueries, `EXISTS` e `IN`. Condições ligadas por `AND` de nível superior geram linhas separadas.
-- Na coluna `Local`, escreva o código do bloco.
-- Na coluna `Cláusula`, escreva `WHERE`, `ON`, `HAVING` ou `QUALIFY`.
-- Na coluna `Condição`, reproduza a condição como está escrita na query. Preserve nomes, valores, aspas e operadores.
-- Na coluna `Coluna(s)`, liste as colunas usadas na condição, sem nomes de função e sem nomes de tipo.
-- Na coluna `Valor ou limite`, registre o lado direito do primeiro operador de comparação de nível superior. Deixe vazio quando a condição não tiver comparação.
-- Não registre filtro de particionamento como caso especial. Ele é uma condição de `WHERE` como qualquer outra.
-- Não registre `CASE` de agregação condicional nem `CASE` de ajuste de valor. Esses pertencem à seção 4.
-
-### Seção 4 — Campos por bloco
-
-- Crie uma subseção para cada bloco que enumere campos, na ordem de aparecimento na query, exceto os operandos de nível mais alto. Estes pertencem à seção 5.
-- O título da subseção usa `<código> — <rótulo do bloco>`.
-- A subseção cobre CTE, subquery e operando aninhado de `UNION`.
-- Quando não existir bloco com lista de campos além dos operandos da saída final, escreva `sem bloco intermediário com lista de campos`.
-- Colunas:
-  - `#`: posição do campo dentro do bloco, começando em 1.
-  - `Campo exposto`: o nome final do campo, ou seja, o nome renomeado quando houver alias.
-  - `Origem`: o código do bloco lido ou o nome `projeto.dataset.objeto` da fonte lida.
-  - `Campo na origem`: o nome do campo na origem quando o campo for lido direto. Deixe vazio quando o campo for criado ou transformado.
-  - `Expressão`: a expressão literal quando o campo for criado ou transformado. Deixe vazio quando o campo for lido direto.
-- Nunca escreva nome de campo e expressão na mesma célula.
-- Copie a expressão sem resumo, sem redução e sem paráfrase.
-- Para `*`, registre o texto literal do asterisco na coluna `Campo na origem` e deixe `Expressão` vazia. Inclua `EXCEPT` ou `REPLACE` quando houver.
-- Uma célula longa é aceita no arquivo, mas acima do limite ela sai da tabela pela seção 6.
-
-### Seção 5 — Saída final
-
-- Registre a saída da `UNION` de nível mais alto da query.
-- Colunas: `#`, `Bloco`, `Campo`, `Tipo`.
-- A coluna `#` é sempre sequencial de 1 até N, sem lacuna. Toda linha da tabela recebe número, inclusive a linha do asterisco.
-- Para cada operando de nível mais alto que enumere campos, registre os campos na ordem das posições.
-- Para cada operando de nível mais alto que use `*`, registre uma linha com o texto literal do asterisco e deixe `Tipo` vazio.
-- Na coluna `Bloco`, escreva `SAÍDA` para campo criado na saída final, ou o código do bloco lido quando a linha registrar `*`.
-- Na coluna `Tipo`, preencha somente quando o tipo estiver explícito no SQL, por `CAST` ou `SAFE_CAST`, ou quando vier de `--schema-json`. Não infira tipo por literal, função, agregação ou nome do campo.
-
-### Seção 6 — Expressões
-
-- Uma linha por expressão acima do limite, na ordem de aparecimento.
-- A coluna `#` recebe `E1`, `E2` e assim por diante. A coluna `Expressão` recebe a fórmula literal, sem resumo.
-
-### Seção 7 — Conferência de posição
-
-- Uma subseção por `UNION` em que todos os operandos enumeram campos e nenhum usa `*`.
-- Uma linha por posição, com o nome do campo em cada operando. Escreva `—` quando o operando não tiver aquela posição.
-- Esta seção existe porque `UNION ALL` casa campos por posição. É dado, não análise.
-
-### Seção 8 — Configuração do modelo
-
-- Só para `.sqlx`. Uma linha por chave de `config` e uma linha por `pre_operations` e `post_operations`, com o texto literal.
-
-## Dataform
-
-- `ref("x")` e `source("a","b")` contam como fontes. Na seção 1, o objeto recebe `x` ou `a.b`, e `Projeto` e `Dataset` recebem `modelo Dataform`.
-- `config { type, partitionBy, clusterBy, … }` vai para a seção 8, uma linha por chave.
-- `pre_operations` e `post_operations` vão para a seção 8, com o SQL literal.
-
-## Tipos da saída final
-
-A coluna `Tipo` fica vazia quando a query não declara o tipo. Para preencher com o schema real, gere antes um arquivo de schema e passe `--schema-json`:
-
-```bash
-bq show --schema --format=json <projeto>:<dataset>.<tabela> > schema.json
-```
-
-**Exija autorização explícita do usuário antes de rodar comando no `gcloud`.** O script nunca fala com o GCP: ele só lê o arquivo de schema local.
-
 ## Comparar versões da query
 
 ```bash
-python3 ~/.agents/skills/modelagem/fichar-query/scripts/comparar_fichas.py <ficha-antiga.md> <ficha-nova.md>
+python3 <pasta-desta-skill>/scripts/comparar_fichas.py <ficha-antiga.md> <ficha-nova.md>
 ```
 
 Mostra blocos, campos e filtros que entraram, saíram ou mudaram entre duas fichas. Use para detectar drift do modelo entre versões.
@@ -222,7 +85,7 @@ Mostra blocos, campos e filtros que entraram, saíram ou mudaram entre duas fich
 - Use o caminho manual quando uma CTE contiver `UNION ALL`: o gerador atual perde o nome e o código do contêiner. Registre a CTE na seção 2 e cada operando na seção 4, com códigos próprios.
 - Confira o resultado contra o SQL mesmo quando o gate aprovar: o gerador atual pode incluir CTEs como fontes físicas, usar um código `BL` para o consumidor final e produzir conferência de posição para blocos que não participam da mesma união. O gate estrutural não detecta esses casos.
 
-O script cobre `SELECT` com `WITH`, `UNION` e `UNION ALL`, subquery no `FROM`, `JOIN`, filtros de nível de bloco e `.sqlx`. Nesses casos o gate reprova e o script não grava: `UNNEST`, `LATERAL`, `PIVOT`, `MERGE`, `CREATE TABLE AS`, subquery na lista de campos e qualquer bloco que ele não consiga balancear. Nesse caso, fiche à mão pelas regras deste documento.
+O script cobre `SELECT` com `WITH`, `UNION` e `UNION ALL`, subquery no `FROM`, `JOIN`, filtros de nível de bloco e `.sqlx`. Nesses casos o gate reprova e o script não grava: `UNNEST`, `LATERAL`, `PIVOT`, `MERGE`, `CREATE TABLE AS`, subquery na lista de campos e qualquer bloco que ele não consiga balancear. Nesse caso, fiche à mão pelas regras de extração.
 
 ## Proibições
 

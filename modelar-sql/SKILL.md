@@ -1,7 +1,8 @@
 ---
-name: modelling
-description: "Use para modelar dados em SQL por entrevista."
-version: 2.0.0
+name: modelar-sql
+description: "Conduz a modelagem de dados em SQL (BigQuery/GoogleSQL por padrão) por entrevista, especificação e aprovação por gates F01–F05, com estudo de custo, dry run e validação, sem publicar nem materializar. Use quando o usuário pedir para modelar, criar ou editar um modelo/query canônica a partir de perguntas de negócio e análise. Não use para apenas explicar, comentar ou fichar uma query existente."
+disable-model-invocation: true
+version: 2.1.0
 author: Hendrix Freire, Hermes Agent
 platforms: [macos, linux, windows]
 ---
@@ -9,6 +10,8 @@ platforms: [macos, linux, windows]
 # Modelagem SQL orientada por especificações
 
 Crie ou edite modelos SQL a partir de perguntas de análise e negócio, conduzindo o trabalho do início ao fim com aprovação explícita entre fases. BigQuery e GoogleSQL são o padrão; para outro banco, identifique o dialeto em F01, adapte os comandos e mantenha o fluxo. Não publique nem materialize.
+
+> **Ferramentas por ambiente.** Esta skill roda em Claude Code, Hermes e Codex. Antes de agir, identifique o ambiente atual e use as ferramentas equivalentes disponíveis nele para ler, buscar e editar arquivos, executar scripts e fazer perguntas ao usuário. Os scripts em `scripts/` são Python puro e rodam em qualquer ambiente com shell.
 
 ## Referências
 
@@ -21,7 +24,7 @@ Crie ou edite modelos SQL a partir de perguntas de análise e negócio, conduzin
 | Ao escrever ou revisar qualquer `.sql` | [Boas práticas na escrita](references/boas-praticas-escrita-sql.md) — estilo, estrutura, agregação e leitura |
 | Em todo estudo de custo | [Custos do BigQuery](references/custos-bigquery.md) |
 | Para comandos prontos de BigQuery e PTAX | [Comandos](references/comandos.md) |
-| Antes de propor variante otimizada | [Otimização SQL](references/otimizacao-sql.md); para outros dialetos, leia também `sql-optimization` |
+| Antes de propor variante otimizada | [Otimização SQL](references/otimizacao-sql.md); para um catálogo mais amplo de técnicas BigQuery, leia também [otimizar-sql](../otimizar-sql/SKILL.md) (as invariantes desta skill prevalecem) |
 | Antes de investigar, gerar SQL ou concluir | [Validação e segurança](references/validacao.md) |
 
 Formatos ficam em `templates/`: copie o template, nunca redija o esqueleto. Os scripts em `scripts/` executam dry run, inventário, câmbio, custo e auditoria; use-os em vez de improvisar comandos. `references/comandos.md` traz os comandos manuais equivalentes.
